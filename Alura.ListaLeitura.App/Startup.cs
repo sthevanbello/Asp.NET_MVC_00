@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Alura.ListaLeitura.App
@@ -18,7 +19,8 @@ namespace Alura.ListaLeitura.App
             builder.MapRoute("Livros/ParaLer", LivrosParaLer);
             builder.MapRoute("Livros/Lendo", LivrosLendo);
             builder.MapRoute("Livros/Lidos", LivrosLidos);
-            builder.MapRoute("Cadastro/novoLivro/{nome}/{autor}", NovoLivroParaLer);
+            builder.MapRoute("Cadastro/NovoLivro/{nome}/{autor}", NovoLivroParaLer);
+            builder.MapRoute("Livros/Detalhes/{id:int}", ExibeDetalhes);
 
             var rotas = builder.Build();
             app.UseRouter(rotas);
@@ -26,13 +28,20 @@ namespace Alura.ListaLeitura.App
             //app.Run(Roteamento);
         }
 
-        
+        private Task ExibeDetalhes(HttpContext context)
+        {
+            int id = Convert.ToInt32(context.GetRouteValue("id"));
+            var repo = new LivroRepositorioCSV();
+            var livro = repo.Todos.FirstOrDefault(i => i.Id == id);
+            return context.Response.WriteAsync(livro.Detalhes());
+        }
 
         public void ConfigureServices(IServiceCollection service)
         {
             service.AddRouting();
         }
 
+        #region Roteamento manual
 
         //public Task Roteamento(HttpContext context)
         //{
@@ -53,6 +62,7 @@ namespace Alura.ListaLeitura.App
         //    context.Response.StatusCode = 404;
         //    return context.Response.WriteAsync("Caminho inexistente.");
         //}
+        #endregion
         private Task NovoLivroParaLer(HttpContext context)
         {
             Livro livro = new Livro();
