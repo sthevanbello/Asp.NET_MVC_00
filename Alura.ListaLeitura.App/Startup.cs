@@ -17,17 +17,17 @@ namespace Alura.ListaLeitura.App
         public void Configure(IApplicationBuilder app)
         {
             var builder = new RouteBuilder(app);
-            builder.MapRoute("Livros/ParaLer", LivrosParaLer);
-            builder.MapRoute("Livros/Lendo", LivrosLendo);
-            builder.MapRoute("Livros/Lidos", LivrosLidos);
+            builder.MapRoute("Livros/ParaLer", LivrosLogica.LivrosParaLer);
+            builder.MapRoute("Livros/Lendo", LivrosLogica.LivrosLendo);
+            builder.MapRoute("Livros/Lidos", LivrosLogica.LivrosLidos);
 
             //builder.MapRoute("Cadastro/NovoLivro/{nome}/{autor}", NovoLivroParaLer);
 
             //Restrição para que o id seja sempre int e retorna erro 404 se não for
-            builder.MapRoute("Livros/Detalhes/{id:int}", ExibeDetalhes);
+            builder.MapRoute("Livros/Detalhes/{id:int}", LivrosLogica.ExibeDetalhes);
 
-            builder.MapRoute("Cadastro/NovoLivro", ExibeFormulario);
-            builder.MapRoute("Cadastro/Incluir", ProcessaFormulario);
+            builder.MapRoute("Cadastro/NovoLivro", CadastroLogica.ExibeFormulario);
+            builder.MapRoute("Cadastro/Incluir", CadastroLogica.ProcessaFormulario);
 
             var rotas = builder.Build();
             app.UseRouter(rotas);
@@ -39,55 +39,7 @@ namespace Alura.ListaLeitura.App
             service.AddRouting();
         }
 
-        private Task ProcessaFormulario(HttpContext context)
-        {
-            Livro livro = new Livro();
-
-            livro.Titulo = context.Request.Form["titulo"].First();
-            livro.Autor = context.Request.Form["autor"].First();
-            var repo = new LivroRepositorioCSV();
-            repo.Incluir(livro);
-
-            return context.Response.WriteAsync("Livro adicionado com sucesso");
-        }
-
-        private Task ExibeFormulario(HttpContext context)
-        {
-            var html = CarregaHTML("formulario");
-
-            return context.Response.WriteAsync(html);
-        }
-
-        private string CarregaHTML(string v)
-        {
-            var nomeCompletoDoArquivo = $"D:/Developer/Alura/Asp.NET Core Uma webapp usando o padrão MVC/Alura.ListaLeitura.Aula2/Alura.ListaLeitura/{v}.cshtml";
-            using (var html = File.OpenText(nomeCompletoDoArquivo))
-            {
-                return html.ReadToEnd();
-            }
-        }
-
-        private string CarregaPaginaHTML(string arquivo, IEnumerable<Livro> _repo)
-        {
-            var html = CarregaHTML(arquivo);
-
-            foreach (var item in _repo)
-            {
-                html = html.Replace("#", $"<li>{item}</li>#");
-            }
-            html = html.Replace("#", "");
-            return html;
-        }
-
-        private Task ExibeDetalhes(HttpContext context)
-        {
-            int id = Convert.ToInt32(context.GetRouteValue("id"));
-            var repo = new LivroRepositorioCSV();
-            var livro = repo.Todos.FirstOrDefault(i => i.Id == id);
-            return context.Response.WriteAsync(livro.Detalhes());
-        }
-
-
+       
         #region Roteamento manual
 
         //public Task Roteamento(HttpContext context)
@@ -125,32 +77,6 @@ namespace Alura.ListaLeitura.App
         //}
         #endregion
 
-        public Task LivrosParaLer(HttpContext context)
-        {
-            var _repo = new LivroRepositorioCSV();
-            string html = CarregaPaginaHTML("paraler", _repo.ParaLer.Livros);
 
-            return context.Response.WriteAsync(html);
-
-            //return context.Response.WriteAsync(_repo.ParaLer.ToString());
-        }
-
-        
-
-        public Task LivrosLendo(HttpContext context)
-        {
-            var _repo = new LivroRepositorioCSV();
-            string html = CarregaPaginaHTML("lendo", _repo.Lendo.Livros);
-
-            return context.Response.WriteAsync(html);
-        }
-
-        public Task LivrosLidos(HttpContext context)
-        {
-            var _repo = new LivroRepositorioCSV();
-            string html = CarregaPaginaHTML("lidos", _repo.Lidos.Livros);
-
-            return context.Response.WriteAsync(html);
-        }
     }
 }
