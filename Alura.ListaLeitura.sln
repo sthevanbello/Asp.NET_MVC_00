@@ -1,9 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27130.2027
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Alura.ListaLeitura.App", "Alura.ListaLeitura.App\Alura.ListaLeitura.App.csproj", "{571AB40F-6426-4983-8DE6-BD0037878BDB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Views", "Views", "{9188703B-4577-4AD4-A8AE-0F03486F4EEF}"
+	ProjectSection(SolutionItems) = preProject
+		formulario.cshtml = formulario.cshtml
+		lendo.cshtml = lendo.cshtml
+		lidos.cshtml = lidos.cshtml
+		paraler.cshtml = paraler.cshtml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
