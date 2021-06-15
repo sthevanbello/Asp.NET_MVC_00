@@ -1,4 +1,5 @@
 ﻿using Alura.ListaLeitura.App.Negocio;
+using Alura.ListaLeitura.App.Repositorio;
 using Alura.ListaLeitura.App.Views;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -8,11 +9,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Alura.ListaLeitura.App.Repositorio
+namespace Alura.ListaLeitura.App.Logica
 {
     public class CadastroLogica
     {
-        public static Task ProcessaFormulario(HttpContext context)
+        public static Task Incluir(HttpContext context)
         {
             Livro livro = new Livro();
 

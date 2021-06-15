@@ -5,17 +5,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
-namespace Alura.ListaLeitura.App
+namespace Alura.ListaLeitura.App.Logica
 {
     class LivrosLogica
     {
 
-        public static Task ExibeDetalhes(HttpContext context)
+        public static Task Detalhes(HttpContext context)
         {
             int id = Convert.ToInt32(context.GetRouteValue("id"));
             var repo = new LivroRepositorioCSV();
@@ -35,7 +33,7 @@ namespace Alura.ListaLeitura.App
             return html;
         }
 
-        public static Task LivrosParaLer(HttpContext context)
+        public static Task ParaLer(HttpContext context)
         {
             var _repo = new LivroRepositorioCSV();
             string html = CarregaPaginaHTML("paraler", _repo.ParaLer.Livros);
@@ -45,7 +43,7 @@ namespace Alura.ListaLeitura.App
             //return context.Response.WriteAsync(_repo.ParaLer.ToString());
         }
 
-        public static Task LivrosLendo(HttpContext context)
+        public static Task Lendo(HttpContext context)
         {
             var _repo = new LivroRepositorioCSV();
             string html = CarregaPaginaHTML("lendo", _repo.Lendo.Livros);
@@ -53,12 +51,17 @@ namespace Alura.ListaLeitura.App
             return context.Response.WriteAsync(html);
         }
 
-        public static Task LivrosLidos(HttpContext context)
+        public static Task Lidos(HttpContext context)
         {
             var _repo = new LivroRepositorioCSV();
             string html = CarregaPaginaHTML("lidos", _repo.Lidos.Livros);
 
             return context.Response.WriteAsync(html);
+        }
+
+        public static Task Teste(HttpContext context)
+        {
+            return context.Response.WriteAsync("Tudo funcionando");
         }
     }
 }
