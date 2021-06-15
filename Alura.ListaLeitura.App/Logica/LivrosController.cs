@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Alura.ListaLeitura.App.Logica
 {
-    public class LivrosController
+    public class LivrosController : Controller
     {
 
         public string Detalhes(int id)
@@ -26,34 +26,34 @@ namespace Alura.ListaLeitura.App.Logica
         {
             var html = HtmlUtils.CarregaHTML(arquivo);
 
-            foreach (var item in _repo)
-            {
-                html = html.Replace("#", $"<li>{item}</li>#");
-            }
+            
             html = html.Replace("#", "");
             return html;
         }
 
         public IActionResult ParaLer()
         {
-            var html = new ViewResult { ViewName = "/Views/Livros/paraler.cshtml" };
+            var repo = new LivroRepositorioCSV();
+            ViewBag.Livros = repo.ParaLer.Livros;
 
-            return html;
+            return View("/Views/Livros/lista.cshtml");
 
         }
 
         public IActionResult Lendo()
         {
-            var html = new ViewResult{ ViewName = "Views/Livros/lendo.cshtml" };
+            var repo = new LivroRepositorioCSV();
+            ViewBag.Livros = repo.Lendo.Livros;
 
-            return html;
+            return View("/Views/Livros/lista.cshtml");
         }
 
         public IActionResult Lidos()
         {
-            var html = new ViewResult { ViewName = "Views/Livros/lidos.cshtml" };
+            var repo = new LivroRepositorioCSV();
+            ViewBag.Livros = repo.Lidos.Livros;
 
-            return html;
+            return View("/Views/Livros/lista.cshtml");
         }
 
         public string Teste()
